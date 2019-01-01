@@ -90,6 +90,8 @@ class BrushTicket(object):
         self.driver_name = 'chrome'
         self.driver = Browser(driver_name=self.driver_name)
 
+        # self.driver=.Chrome(executable_path='C:\Program Files (x86)\Google\Chrome\Application\chromedriver.exe')
+
     def do_login(self):
         """登录功能实现，手动识别验证码进行登录"""
         self.driver.visit(self.login_url)
@@ -150,6 +152,10 @@ class BrushTicket(object):
                                         # 选择用户
                                         print('开始选择用户……')
                                         self.driver.find_by_text(p).last.click()
+                                        if p=='周奕霖':
+                                        # print(p,type(p))
+                                            # if p[]=='周奕霖':
+                                            self.driver.find_by_id('dialog_xsertcj_ok').click()
                                         # 选择座位类型
                                         print('开始选择席别……')
                                         if self.seat_type_value != 0:
@@ -157,8 +163,10 @@ class BrushTicket(object):
                                                 "//select[@id='seatType_" + str(key_value) + "']/option[@value='" + str(
                                                     self.seat_type_value) + "']").first.click()
                                         key_value += 1
+
                                         sleep(0.2)
                                         if p[-1] == ')':
+
                                             self.driver.find_by_id('dialog_xsertcj_ok').click()
                                     print('正在提交订单……')
                                     self.driver.find_by_id('submitOrder_id').click()
@@ -208,8 +216,8 @@ class BrushTicket(object):
         # 连接邮箱服务器信息
         host = 'smtp.163.com'
         port = 25
-        sender = 'gxcuizy@163.com'  # 你的发件邮箱号码
-        pwd = 'FatBoy666'  # 不是登陆密码，是客户端授权密码
+        sender = 'fnexcn@163.com'  # 你的发件邮箱号码
+        pwd = 'ljb2522182'  # 不是登陆密码，是客户端授权密码
         # 发件信息
         receiver = receiver_address
         body = '<h2>温馨提醒：</h2><p>' + content + '</p>'
@@ -225,14 +233,17 @@ class BrushTicket(object):
 
 if __name__ == '__main__':
     # 乘客姓名
-    passengers_input = input('请输入乘车人姓名，多人用英文逗号“,”连接，（例如单人“张三”或者多人“张三,李四”，如果学生的话输入“王五()”）：')
+    #####passengers_input = input('请输入乘车人姓名，多人用英文逗号“,”连接，（例如单人“张三”或者多人“张三,李四”，如果学生的话输入“王五()”）：')
+    ###[初始化购票人]
+    passengers_input="周飞,李蕾,周奕霖"
     passengers = passengers_input.split(",")
     while passengers_input == '' or len(passengers) > 4:
         print('乘车人最少1位，最多4位！')
         passengers_input = input('请重新输入乘车人姓名，多人用英文逗号“,”连接，（例如单人“张三”或者多人“张三,李四”）：')
         passengers = passengers_input.split(",")
     # 乘车日期
-    from_time = input('请输入乘车日期（例如“2018-08-08”）：')
+    #####from_time = input('请输入乘车日期（例如“2018-08-08”）：')
+    from_time="2019-01-15"
     date_pattern = re.compile(r'^\d{4}-\d{2}-\d{2}$')
     while from_time == '' or re.findall(date_pattern, from_time) == []:
         from_time = input('乘车日期不能为空或者时间格式不正确，请重新输入：')
@@ -247,33 +258,41 @@ if __name__ == '__main__':
         'yc': '%u8FD0%u57CE%2CYNV',  # 运城
         'gzn': '%u5E7F%u5DDE%u5357%2CIZQ',  # 广州南
         'wzn': '%u68A7%u5DDE%u5357%2CWBZ',  # 梧州南
+        'hz':'%u676D%u5DDE%u4E1C%2CHGH', #杭州东
+        # 'huz':'',#湖州
     }
     # 出发站
-    from_input = input('请输入出发站，只需要输入首字母就行（例如北京“bj”）：')
+    ####from_input = input('请输入出发站，只需要输入首字母就行（例如北京“bj”）：')
+    from_input="hz"
     while from_input not in city_list.keys():
         from_input = input('出发站不能为空或不支持当前出发站（如有需要，请联系管理员！），请重新输入：')
     from_station = city_list[from_input]
     # 终点站
-    to_input = input('请输入终点站，只需要输入首字母就行（例如北京“bj”）：')
+    ####to_input = input('请输入终点站，只需要输入首字母就行（例如北京“bj”）：')
+    to_input="wh"
     while to_input not in city_list.keys():
         to_input = input('终点站不能为空或不支持当前终点站（如有需要，请联系管理员！），请重新输入：')
     to_station = city_list[to_input]
     # 乘车车次
-    number_input = input('请输入抢票车次号，多车次用英文逗号“,”链接，（例如单车次“Z285”或者多车次“Z285,G110”）：')
+    ####number_input = input('请输入抢票车次号，多车次用英文逗号“,”链接，（例如单车次“Z285”或者多车次“Z285,G110”）：')
+    number_input="G590"
     numbers = number_input.split(",")
     while number_input == '':
         number_input = input('请重新输入抢票车次号，多车次用英文逗号“,”链接，（例如单车次“Z285”或者多车次“Z285,G110”）：')
         numbers = number_input.split(",")
     # 座位类型
-    seat_type = input('请输入座位类型（例如“软卧”）：')
+    ####seat_type = input('请输入座位类型（例如“软卧”）：')
+    seat_type="二等座"
     while seat_type == '':
         seat_type = input('座位类型不能为空，请重新输入：')
     # 抢票成功，通知该手机号码
-    receiver_mobile = input('请预留一个手机号码，方便抢到票后进行通知（例如：18888888888）：')
+    ####receiver_mobile = input('请预留一个手机号码，方便抢到票后进行通知（例如：18888888888）：')
+    receiver_mobile="13567244233"
     mobile_pattern = re.compile(r'^1{1}\d{10}$')
     while receiver_mobile == '' or re.findall(mobile_pattern, receiver_mobile) == []:
         receiver_mobile = input('预留手机号码不能为空或者格式不正确，请重新输入：')
-    receiver_email = input('请预留一个邮箱，方便抢到票后进行通知（例如：test@163.com）：')
+    ####receiver_email = input('请预留一个邮箱，方便抢到票后进行通知（例如：test@163.com）：')
+    receiver_email = "9570075@qq.com"
     while receiver_email == '':
         receiver_email = input('预留邮箱不能为空，请重新输入：')
     # 开始抢票
